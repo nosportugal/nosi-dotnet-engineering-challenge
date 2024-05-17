@@ -49,6 +49,7 @@ namespace NOS.Engineering.Challenge.Managers
             if (createdContent != null)
             {
                 _cache.Remove("GetManyContents"); // Invalidate cache for list
+                _cache.Remove("SearchContents"); // Invalidate cache for search
             }
             return createdContent;
         }
@@ -79,6 +80,7 @@ namespace NOS.Engineering.Challenge.Managers
             {
                 _cache.Remove($"GetContent_{id}"); // Invalidate cache for item
                 _cache.Remove("GetManyContents"); // Invalidate cache for list
+                _cache.Remove("SearchContents"); // Invalidate cache for search
             }
             return updatedContent;
         }
@@ -90,6 +92,7 @@ namespace NOS.Engineering.Challenge.Managers
             {
                 _cache.Remove($"GetContent_{id}"); // Invalidate cache for item
                 _cache.Remove("GetManyContents"); // Invalidate cache for list
+                _cache.Remove("SearchContents"); // Invalidate cache for search
             }
             return deletedId;
         }
@@ -101,6 +104,7 @@ namespace NOS.Engineering.Challenge.Managers
             {
                 _cache.Remove($"GetContent_{id}"); // Invalidate cache for item
                 _cache.Remove("GetManyContents"); // Invalidate cache for list
+                _cache.Remove("SearchContents"); // Invalidate cache for search
             }
             return updatedContent;
         }
@@ -112,8 +116,25 @@ namespace NOS.Engineering.Challenge.Managers
             {
                 _cache.Remove($"GetContent_{id}"); // Invalidate cache for item
                 _cache.Remove("GetManyContents"); // Invalidate cache for list
+                _cache.Remove("SearchContents"); // Invalidate cache for search
             }
             return updatedContent;
+        }
+
+        public async Task<IEnumerable<Content?>> SearchContents(string? title, string? genre)
+        {
+            var cacheKey = $"SearchContents_{title}_{genre}";
+            if (!_cache.TryGetValue(cacheKey, out IEnumerable<Content?> contents))
+            {
+                _logger.LogInformation("Cache miss for SearchContents with Title: {Title} and Genre: {Genre}", title, genre);
+                contents = await _innerManager.SearchContents(title, genre).ConfigureAwait(false);
+                _cache.Set(cacheKey, contents, _cacheOptions);
+            }
+            else
+            {
+                _logger.LogInformation("Cache hit for SearchContents with Title: {Title} and Genre: {Genre}", title, genre);
+            }
+            return contents;
         }
     }
 }
