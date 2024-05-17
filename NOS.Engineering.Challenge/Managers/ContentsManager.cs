@@ -36,4 +36,42 @@ public class ContentsManager : IContentsManager
     {
         return _database.Delete(id);
     }
+
+    public async Task<Content?> AddGenres(Guid id, IEnumerable<string> genres)
+    {
+        var content = await _database.Read(id).ConfigureAwait(false);
+        if (content == null) return null;
+
+        content.AddGenres(genres);
+        await _database.Update(id, new ContentDto(
+            content.Title, 
+            content.SubTitle, 
+            content.Description, 
+            content.ImageUrl, 
+            content.Duration, 
+            content.StartTime, 
+            content.EndTime, 
+            content.GenreList)).ConfigureAwait(false);
+
+        return content;
+    }
+
+    public async Task<Content?> RemoveGenres(Guid id, IEnumerable<string> genres)
+    {
+        var content = await _database.Read(id).ConfigureAwait(false);
+        if (content == null) return null;
+
+        content.RemoveGenres(genres);
+        await _database.Update(id, new ContentDto(
+            content.Title, 
+            content.SubTitle, 
+            content.Description, 
+            content.ImageUrl, 
+            content.Duration, 
+            content.StartTime, 
+            content.EndTime, 
+            content.GenreList)).ConfigureAwait(false);
+
+        return content;
+    }
 }

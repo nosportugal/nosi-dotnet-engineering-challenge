@@ -66,22 +66,24 @@ public class ContentController : Controller
         var deletedId = await _manager.DeleteContent(id).ConfigureAwait(false);
         return Ok(deletedId);
     }
-    
+
     [HttpPost("{id}/genre")]
-    public Task<IActionResult> AddGenres(
-        Guid id,
-        [FromBody] IEnumerable<string> genre
+    public async Task<IActionResult> AddGenres(
+        Guid id, 
+        [FromBody] IEnumerable<string> genres
     )
     {
-        return Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.NotImplemented));
+        var content = await _manager.AddGenres(id, genres).ConfigureAwait(false);
+        return content == null ? NotFound() : Ok(content);
     }
-    
+
     [HttpDelete("{id}/genre")]
-    public Task<IActionResult> RemoveGenres(
-        Guid id,
-        [FromBody] IEnumerable<string> genre
+    public async Task<IActionResult> RemoveGenres(
+        Guid id, 
+        [FromBody] IEnumerable<string> genres
     )
     {
-        return Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.NotImplemented));
+        var content = await _manager.RemoveGenres(id, genres).ConfigureAwait(false);
+        return content == null ? NotFound() : Ok(content);
     }
 }
