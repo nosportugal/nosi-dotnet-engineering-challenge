@@ -1,17 +1,35 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace NOS.Engineering.Challenge.Models;
 
 public class Content
 {
+    [Key]
     public Guid Id { get; }
-    public string Title { get; }
-    public string SubTitle { get; }
-    public string Description { get; }
-    public string ImageUrl { get; }
-    public int Duration { get; }
-    public DateTime StartTime { get; }
-    public DateTime EndTime { get; }
-    public IEnumerable<string> GenreList { get; private set; }
 
+    [Required]
+    public string Title { get; }
+
+    [Required]
+    public string SubTitle { get; }
+
+    [Required]
+    public string Description { get; }
+
+    [Required]
+    public string ImageUrl { get; }
+
+    [Required]
+    public int Duration { get; }
+
+    [Required]
+    public DateTime StartTime { get; }
+
+    [Required]
+    public DateTime EndTime { get; }
+
+    [Required]
+    public IEnumerable<string> GenreList { get; private set; }
 
     public Content(Guid id, string title, string subTitle, string description, string imageUrl, int duration, DateTime startTime, DateTime endTime, IEnumerable<string> genreList)
     {
