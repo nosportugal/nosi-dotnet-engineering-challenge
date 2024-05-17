@@ -19,11 +19,13 @@ builder.Logging.AddFilter("Microsoft", LogLevel.Warning)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=content.db"));
 
+// Add MemoryCache
+builder.Services.AddMemoryCache();
+
 // Add DI for custom services
 builder.Services.AddScoped<IMapper<Content, ContentDto>, ContentMapper>();
 builder.Services.AddScoped<IDatabase<Content, ContentDto>, DatabaseService>();
-builder.Services.AddScoped<IContentsManager, ContentsManager>();
-
+builder.Services.AddScoped<IContentsManager, CachedContentsManager>();
 // Register services
 builder.ConfigureWebHost()
        .RegisterServices();
