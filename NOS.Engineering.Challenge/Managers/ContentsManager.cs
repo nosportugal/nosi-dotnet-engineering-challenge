@@ -128,4 +128,22 @@ public class ContentsManager : IContentsManager
 
         return updatedContent;
     }
+
+    public async Task<IEnumerable<Content?>> SearchContents(string? title, string? genre)
+    {
+        _logger.LogInformation("Searching contents with Title: {Title} and Genre: {Genre}", title, genre);
+        var contents = await _database.ReadAll().ConfigureAwait(false);
+
+        if (!string.IsNullOrEmpty(title))
+        {
+            contents = contents.Where(c => c != null && c.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrEmpty(genre))
+        {
+            contents = contents.Where(c => c != null && c.GenreList.Any(g => g.Contains(genre, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        return contents;
+    }
 }

@@ -19,6 +19,7 @@ public class ContentController : Controller
     }
 
     [HttpGet]
+    [Obsolete("This endpoint is deprecated. Use /api/v1/Content/search instead.")]
     public async Task<IActionResult> GetManyContents()
     {
         _logger.LogInformation("Received request to get all contents");
@@ -27,6 +28,21 @@ public class ContentController : Controller
         if (!contents.Any())
         {
             _logger.LogWarning("No contents found");
+            return NotFound();
+        }
+
+        return Ok(contents);
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchContents([FromQuery] string? title, [FromQuery] string? genre)
+    {
+        _logger.LogInformation("Received request to search contents with Title: {Title} and Genre: {Genre}", title, genre);
+        var contents = await _manager.SearchContents(title, genre).ConfigureAwait(false);
+
+        if (!contents.Any())
+        {
+            _logger.LogWarning("No contents found matching the search criteria");
             return NotFound();
         }
 

@@ -196,5 +196,38 @@ namespace NOS.Engineering.Challenge.API.Tests
             var okResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(content, okResult.Value);
         }
+
+        [Fact]
+        public async Task SearchContents_ShouldReturnOkResultWithFilteredContents()
+        {
+            // Arrange
+            var contents = new List<Content>
+        {
+            new Content(Guid.NewGuid(), "Inception", "Subtitle1", "Description1", "ImageUrl1", 120, DateTime.Now, DateTime.Now.AddHours(2), new List<string> { "Sci-Fi" }),
+            new Content(Guid.NewGuid(), "Interstellar", "Subtitle2", "Description2", "ImageUrl2", 120, DateTime.Now, DateTime.Now.AddHours(2), new List<string> { "Sci-Fi", "Adventure" })
+        };
+
+            _contentsManagerMock.Setup(manager => manager.SearchContents("Inception", "Sci-Fi")).ReturnsAsync(contents);
+
+            // Act
+            var result = await _controller.SearchContents("Inception", "Sci-Fi");
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(contents, okResult.Value);
+        }
+
+        [Fact]
+        public async Task SearchContents_ShouldReturnNotFoundWhenNoContentsMatch()
+        {
+            // Arrange
+            _contentsManagerMock.Setup(manager => manager.SearchContents("Unknown", "Genre")).ReturnsAsync(new List<Content>());
+
+            // Act
+            var result = await _controller.SearchContents("Unknown", "Genre");
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
+        }
     }
 }
