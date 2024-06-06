@@ -1,6 +1,9 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using NOS.Engineering.Challenge.Data;
 using NOS.Engineering.Challenge.Database;
 using NOS.Engineering.Challenge.Managers;
 using NOS.Engineering.Challenge.Models;
@@ -19,8 +22,7 @@ public static class WebApplicationBuilderExtensions
             options.SerializerOptions.PropertyNamingPolicy = null;
         });
         serviceCollection.AddControllers();
-        serviceCollection
-            .AddEndpointsApiExplorer();
+        serviceCollection.AddEndpointsApiExplorer();
 
         serviceCollection.AddSwaggerGen(c =>
         {
@@ -30,26 +32,25 @@ public static class WebApplicationBuilderExtensions
         serviceCollection
             .RegisterSlowDatabase()
             .RegisterContentsManager();
+
         return webApplicationBuilder;
     }
 
     private static IServiceCollection RegisterSlowDatabase(this IServiceCollection services)
     {
-        services.AddSingleton<IDatabase<Content, ContentDto>,SlowDatabase<Content, ContentDto>>();
+        services.AddSingleton<IDatabase<Content, ContentDto>, SlowDatabase<Content, ContentDto>>();
         services.AddSingleton<IMapper<Content, ContentDto>, ContentMapper>();
         services.AddSingleton<IMockData<Content>, MockData>();
 
         return services;
     }
-    
+
     private static IServiceCollection RegisterContentsManager(this IServiceCollection services)
     {
         services.AddSingleton<IContentsManager, ContentsManager>();
-
         return services;
     }
-    
-    
+
     public static WebApplicationBuilder ConfigureWebHost(this WebApplicationBuilder webApplicationBuilder)
     {
         webApplicationBuilder
@@ -57,5 +58,18 @@ public static class WebApplicationBuilderExtensions
             .ConfigureLogging(logging => { logging.ClearProviders(); });
 
         return webApplicationBuilder;
+    }
+
+    public static IServiceCollection RegisterEfContentDatabase(this IServiceCollection services, string connectionString)
+    {
+        services.AddDbContext<ContentDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddScoped<IDatabase<Content, ContentDto>, EfContentDatabase>();
+        return services;
+    }
+
+    public static IServiceCollection AddCaching(this IServiceCollection services)
+    {
+        services.Decorate<IDatabase<Content, ContentDto>, CacheContentDatabase>();
+        return services;
     }
 }

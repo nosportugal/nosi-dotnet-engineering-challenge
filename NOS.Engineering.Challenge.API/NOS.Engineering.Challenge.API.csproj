@@ -11,6 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
+      <PackageReference Include="Scrutor" Version="4.2.2" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 

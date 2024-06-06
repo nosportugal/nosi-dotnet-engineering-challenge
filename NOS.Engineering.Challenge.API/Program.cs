@@ -8,5 +8,5 @@ var app = builder.Build();
 app.MapControllers();
 app.UseSwagger()
     .UseSwaggerUI();
-    
+
 app.Run();
