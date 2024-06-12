@@ -32,20 +32,28 @@ This is a dotnet service that provides CRUD operations for managing content, wit
    cd [repo-directory]
     ```
 2. **Install dependencies:**
-    ```sh
+    
+    sh
     dotnet restore
-    ```
+    
 3. **Set up the new database (if applicable):**
 
-    [Instructions specific to your chosen database]
+    *If you're using MongoDB:*
+   - Install MongoDB on your system.
+   - Create a new database for the application.
+   - Update the connection string in the `appsettings.json` file with the MongoDB URI.
+
+   *If you're using Redis:*
+   - Install Redis on your system.
+   - Configure Redis settings in the `appsettings.json` file.
 
 ## Usage
 
 **Run the application:**
 
-    ```sh
+    sh
     dotnet run
-    ```
+    
 **Access the endpoints via:**
 
    - GET /api/v1/Content
@@ -54,14 +62,14 @@ This is a dotnet service that provides CRUD operations for managing content, wit
    - DELETE /api/v1/Content/{id}
    - POST /api/v1/Content/{id}/genre
    - DELETE /api/v1/Content/{id}/genre
+   - GET /api/v1/Content/Search
   
 ##Testing
 
 1. **Run the tests:**
 
-    ```sh
+    sh
     dotnet test
-    ```
 
 ##Technologies Used
 
