@@ -50,10 +50,8 @@ This is a dotnet service that provides CRUD operations for managing content, wit
 ## Usage
 
 **Run the application:**
-
-    ``sh
+    
     dotnet run
-    ``
     
 **Access the endpoints via:**
 
