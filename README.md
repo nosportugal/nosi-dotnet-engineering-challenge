@@ -101,7 +101,7 @@ Create a new endpoint that deprecates this and implements a way to filter the co
    - DELETE /api/v1/Content/{id}/genre
    - GET /api/v1/Content/Search
   
-##Testing
+## Testing
 
 1. **Run the tests:**
 
@@ -109,7 +109,7 @@ Create a new endpoint that deprecates this and implements a way to filter the co
     dotnet test
     ```
 
-##Technologies Used
+## Technologies Used
 
    - ASP.NET Core
    - Redis (for caching)
@@ -123,6 +123,6 @@ Create a new endpoint that deprecates this and implements a way to filter the co
    - This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
     
-##Contributing
+## Contributing
 
    - Feel free to submit issues or pull requests. For major changes, please open an issue first to discuss what you would like to change.
