@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using NOS.Engineering.Challenge.Managers;
 using NOS.Engineering.Challenge.Models;
 using System.Text.Json;
 
-namespace NOS.Engineering.Challenge.Database
+namespace NOS.Engineering.Challenge.Managers
 {
     public class CachedContentsManager : IContentsManager
     {
@@ -45,7 +44,7 @@ namespace NOS.Engineering.Challenge.Database
             if (createdContent != null)
             {
                 _logger.LogInformation($"Content created: {createdContent.Id}");
-                await _cache.RemoveAsync("AllContents"); 
+                await _cache.RemoveAsync("AllContents");
             }
             return createdContent;
         }
@@ -80,7 +79,7 @@ namespace NOS.Engineering.Challenge.Database
             {
                 _logger.LogInformation($"Content updated: {id}");
                 await _cache.RemoveAsync($"Content_{id}");
-                await _cache.RemoveAsync("AllContents"); 
+                await _cache.RemoveAsync("AllContents");
             }
             return updatedContent;
         }
@@ -91,7 +90,7 @@ namespace NOS.Engineering.Challenge.Database
             if (deletedId != Guid.Empty)
             {
                 _logger.LogInformation($"Content deleted: {id}");
-                await _cache.RemoveAsync($"Content_{id}"); 
+                await _cache.RemoveAsync($"Content_{id}");
                 await _cache.RemoveAsync("AllContents");
             }
             return deletedId;
@@ -104,7 +103,7 @@ namespace NOS.Engineering.Challenge.Database
             {
                 _logger.LogInformation($"Genre added to content: {id}");
                 await _cache.RemoveAsync($"Content_{id}");
-                await _cache.RemoveAsync("AllContents"); 
+                await _cache.RemoveAsync("AllContents");
             }
             return updatedContent;
         }
@@ -115,8 +114,8 @@ namespace NOS.Engineering.Challenge.Database
             if (updatedContent != null)
             {
                 _logger.LogInformation($"Genre removed from content: {id}");
-                await _cache.RemoveAsync($"Content_{id}"); 
-                await _cache.RemoveAsync("AllContents"); 
+                await _cache.RemoveAsync($"Content_{id}");
+                await _cache.RemoveAsync("AllContents");
             }
             return updatedContent;
         }

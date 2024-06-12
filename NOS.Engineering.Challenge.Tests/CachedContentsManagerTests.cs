@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NOS.Engineering.Challenge.Database;
 using NOS.Engineering.Challenge.Managers;
 using NOS.Engineering.Challenge.Models;
 using System.Text;
