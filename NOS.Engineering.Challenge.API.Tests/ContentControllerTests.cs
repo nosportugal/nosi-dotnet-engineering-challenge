@@ -5,11 +5,6 @@ using NOS.Engineering.Challenge.API.Controllers;
 using NOS.Engineering.Challenge.API.Models;
 using NOS.Engineering.Challenge.Managers;
 using NOS.Engineering.Challenge.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace NOS.Engineering.Challenge.API.Tests
 {
@@ -139,6 +134,77 @@ namespace NOS.Engineering.Challenge.API.Tests
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnedId = Assert.IsType<Guid>(okResult.Value);
             Assert.Equal(contentId, returnedId);
+        }
+        [Fact]
+        public async Task AddGenres_ReturnsOk_WhenGenreIsAdded()
+        {
+            // Arrange
+            var contentId = Guid.NewGuid();
+            var genres = new List<string> { "Action", "Adventure" };
+            var content = new Content(contentId, "Title", "SubTitle", "Description", "ImageUrl", 120, DateTime.Now, DateTime.Now.AddHours(2), genres);
+
+            _mockManager.Setup(m => m.AddGenre(contentId, genres)).ReturnsAsync(content);
+
+            // Act
+            var result = await _controller.AddGenres(contentId, genres);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnedContent = Assert.IsType<Content>(okResult.Value);
+            Assert.Equal(contentId, returnedContent.Id);
+        }
+
+        [Fact]
+        public async Task AddGenres_ReturnsNotFound_WhenContentNotFound()
+        {
+            // Arrange
+            var contentId = Guid.NewGuid();
+            var genres = new List<string> { "Action", "Adventure" };
+
+            _mockManager.Setup(m => m.AddGenre(contentId, genres)).ReturnsAsync((Content)null);
+
+            // Act
+            var result = await _controller.AddGenres(contentId, genres);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal("Genre already exists or content not found.", notFoundResult.Value);
+        }
+
+        [Fact]
+        public async Task RemoveGenres_ReturnsOk_WhenGenreIsRemoved()
+        {
+            // Arrange
+            var contentId = Guid.NewGuid();
+            var genres = new List<string> { "Action" };
+            var content = new Content(contentId, "Title", "SubTitle", "Description", "ImageUrl", 120, DateTime.Now, DateTime.Now.AddHours(2), new List<string>());
+
+            _mockManager.Setup(m => m.RemoveGenre(contentId, genres)).ReturnsAsync(content);
+
+            // Act
+            var result = await _controller.RemoveGenres(contentId, genres);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnedContent = Assert.IsType<Content>(okResult.Value);
+            Assert.Equal(contentId, returnedContent.Id);
+        }
+
+        [Fact]
+        public async Task RemoveGenres_ReturnsNotFound_WhenGenreOrContentNotFound()
+        {
+            // Arrange
+            var contentId = Guid.NewGuid();
+            var genres = new List<string> { "Action" };
+
+            _mockManager.Setup(m => m.RemoveGenre(contentId, genres)).ReturnsAsync((Content)null);
+
+            // Act
+            var result = await _controller.RemoveGenres(contentId, genres);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal("Genre not found or content not found.", notFoundResult.Value);
         }
 
         [Fact]
