@@ -33,9 +33,10 @@ This is a dotnet service that provides CRUD operations for managing content, wit
     ```
 2. **Install dependencies:**
     
-    sh
+    ```sh
     dotnet restore
-    
+    ```
+
 3. **Set up the new database (if applicable):**
 
     *If you're using MongoDB:*
@@ -51,8 +52,9 @@ This is a dotnet service that provides CRUD operations for managing content, wit
 
 **Run the application:**
 
-    sh
+    ```sh
     dotnet run
+    ```
     
 **Access the endpoints via:**
 
@@ -68,8 +70,9 @@ This is a dotnet service that provides CRUD operations for managing content, wit
 
 1. **Run the tests:**
 
-    sh
+    ```sh
     dotnet test
+    ```
 
 ##Technologies Used
 
