@@ -32,11 +32,10 @@ This is a dotnet service that provides CRUD operations for managing content, wit
    cd [repo-directory]
     ```
 2. **Install dependencies:**
-    
     ```sh
     dotnet restore
     ```
-
+    
 3. **Set up the new database (if applicable):**
 
     *If you're using MongoDB:*
@@ -82,6 +81,12 @@ This is a dotnet service that provides CRUD operations for managing content, wit
    - Moq (for mocking in unit tests)
    - xUnit (for testing)
    - Serilog (for logging)
+
+## License
+
+   - This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
     
 ##Contributing
+
    - Feel free to submit issues or pull requests. For major changes, please open an issue first to discuss what you would like to change.
