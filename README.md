@@ -66,15 +66,18 @@ Create a new endpoint that deprecates this and implements a way to filter the co
 
 1. **Clone the repository:**
    ```sh
-   git clone [your-repo-url]
-   cd [repo-directory]
-    ```
-2. **Install dependencies:**
+   git clone https://github.com/BruneiMS/nosi-dotnet-engineering-challenge.git
+   ```
+2. **Navigate to the cloned repository directory:**
+   ```sh
+    cd nosi-dotnet-engineering-challenge
+   ```
+3. **Install dependencies:**
     ```sh
     dotnet restore
     ```
     
-3. **Set up the new database (if applicable):**
+4. **Set up the new database (if applicable):**
 
     *If you're using MongoDB:*
    - Install MongoDB on your system.
