@@ -123,9 +123,10 @@ Create a new endpoint that deprecates this and implements a way to filter the co
 
 ## License
 
-   - This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-    
 ## Contributing
 
-   - Feel free to submit issues or pull requests. For major changes, please open an issue first to discuss what you would like to change.
+Feel free to submit issues or pull requests. For major changes, please open an issue first to discuss what you would like to change.
+
+![Visitas](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/BruneiMS/nosi-dotnet-engineering-challenge)
