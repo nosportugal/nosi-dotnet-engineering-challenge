@@ -48,8 +48,7 @@ public static class WebApplicationBuilderExtensions
 
         return services;
     }
-    
-    
+        
     public static WebApplicationBuilder ConfigureWebHost(this WebApplicationBuilder webApplicationBuilder)
     {
         webApplicationBuilder
