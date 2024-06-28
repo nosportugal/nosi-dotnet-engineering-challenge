@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using NOS.Engineering.Challenge.API.Models;
 using NOS.Engineering.Challenge.Managers;
+using NOS.Engineering.Challenge.Models;
 
 namespace NOS.Engineering.Challenge.API.Controllers;
 
@@ -68,20 +69,98 @@ public class ContentController : Controller
     }
     
     [HttpPost("{id}/genre")]
-    public Task<IActionResult> AddGenres(
+    public async Task<IActionResult> AddGenres(
         Guid id,
-        [FromBody] IEnumerable<string> genre
+        [FromBody] IEnumerable<string> genreList
     )
     {
-        return Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.NotImplemented));
+        if (genreList.Count() <= 0)
+        {
+            return Ok();
+        }
+
+        var content = await  _manager.GetContent(id);
+        
+        if (content == null) {
+            return NotFound();
+        }
+        
+        foreach(var genre in genreList)
+        {
+            if (content.GenreList.Contains(genre)){
+                continue;
+            }
+            content.GenreList.Append(genre);
+        }
+
+        var result = await _manager.UpdateContent(id, new ContentDto(
+                content.Title,
+                content.SubTitle,
+                content.Description,
+                content.ImageUrl,
+                content.Duration,
+                content.StartTime,
+                content.EndTime,
+                content.GenreList));
+       
+        return result == null ? Problem() : Ok(result);
     }
     
     [HttpDelete("{id}/genre")]
-    public Task<IActionResult> RemoveGenres(
+    public async Task<IActionResult> RemoveGenres(
         Guid id,
-        [FromBody] IEnumerable<string> genre
+        [FromBody] IEnumerable<string> genreList
     )
     {
-        return Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.NotImplemented));
+        if(genreList.Count() <= 0)
+        {
+            return Ok();
+        }
+
+        var content = await _manager.GetContent(id);
+
+        if (content == null)
+        {
+            return NotFound();
+        }
+
+        var updatedGenres = content.GenreList.Except(genreList);
+
+        var result = await _manager.UpdateContent(id, new ContentDto(
+                content.Title,
+                content.SubTitle,
+                content.Description,
+                content.ImageUrl,
+                content.Duration,
+                content.StartTime,
+                content.EndTime,
+                updatedGenres));
+
+        return result == null ? Problem() : Ok(result);
+    }
+
+    [HttpGet("Search")]
+    public async Task<IActionResult> Search( [FromQuery] string title = "", string genre = "")
+    {
+        if( string.IsNullOrWhiteSpace(title) && string.IsNullOrEmpty(genre))
+        {
+            return BadRequest();
+        }
+
+        var contents = await _manager.GetManyContents().ConfigureAwait(false);
+
+        if (!contents.Any())
+            return NotFound();
+
+        var result = contents.Where(c => c.Title.Contains(title));
+
+        result.Concat(contents.Where(c => c.GenreList.Any(g => g.Contains(genre))));
+
+
+        if (!result.Any())
+            return NotFound();
+
+        return Ok(contents);
+
     }
 }
